@@ -2,15 +2,13 @@
 
 This guide continues from (Creating a Checkout with Commerce.js SDK and Nuxt.js)[Creating a Checkout](https://github.com/ElijahKotyluk/nuxt-cjs-adding-products)
 
-This guide illustrates how to create a webhook in the Chec dashboard and use it to send an Email to the customer.
+This guide illustrates how to create a webhook in the Chec dashboard and use it to send an Email to the customer also how to create a simple confirmation page.
 
 [Live Demo](https://cjs-nuxt-webhook.herokuapp.com/)
 
 ***** *Note* *****
 
 * This guide uses v2 of the Commerce.js SDK
-
-![](https://imgur.com/a/o0Q6e0S)
 
 ## Overview
 In the previous guide you created a checkout page for your customers, generated a checkout token, and captured an order. In this guide you will be introduced to using CommerceJS's [webhooks](https://commercejs.com/docs/api/#webhooks), integrate [SendGrid](https://sendgrid.com/)'s email API, and send an email message with the customer's order reference.
@@ -319,6 +317,26 @@ export default {
    ...mapState(['checkout'])
   }
 }
+```
+
+Once you've created your confirmation page, go back to your `BillingDetails.vue` component at `components/BillingDetails.vue` to edit the submit method to now dispatch the `captureCheckout` action to the store and push to the confirmation page route using the order id as the route slug. Once you've completed this step it is now a good time to test out your app and make sure everything is working properly, don't forget to test using ngrok to be sure your webhook is working. 
+
+```js
+// components/BillingDetails.vue
+...
+submitOrder() {
+  ...
+  // capture checkout data
+  const data = {
+  ...
+  }
+  this.$store
+    .dispatch('captureCheckout', { token: this.token.id, data })
+    .then((val) => {
+      this.$router.push(`/order/${val.id}`)
+    })
+},
+...
 ```
 
 ### Conclusion
