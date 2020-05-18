@@ -22,6 +22,7 @@ In the previous guide you created a checkout page for your customers, generated 
 3. Install SendGrid and update your server
 4. Install ngrok and test the webhook
 5. Send an email to your customer
+6. Create an order confirmation page
 
 ## Requirements
 
@@ -309,7 +310,7 @@ To test your webhook out, open up your browser and paste the copied link again i
 
 ### Conclusion
 
-Great job, you've successfully sent an email to your customer after they've submitted an order.
+Great job, you've successfully sent an email to your customer after they've submitted an order as well as a confirmation page for the customer.
 
 Let's review what you have accomplished in this guide.
 
@@ -317,20 +318,10 @@ Let's review what you have accomplished in this guide.
 * Updated your server to listen for a request from the webhook and use the data to send an email.
 * Created a webhook that triggers whenever a customer creates an order
 * Installed and used ngrok to test your webhook
-* 
+* Sent an email to your customer when an order is submitted
+* Created a confirmation page 
 
 [Live Demo](https://cjs-nuxt-webhook.herokuapp.com/)
-
-## Conclusion
-Nice work, you've successfully created a checkout page and captured an order.
-
-Let's review what we have accommplished in this guide.
-
-* Learned how to create shipping regions and apply them to products in your dashboard
-* Generated a checkout token and used that token to capture an order
-* Created a component to be used as a form to gather data to submit the capture
-* Wrote rules for required inputs
-* Created a Checkout page for your customers
 
 As you can see, the Commerce.js SDK greatly simplifies the eCommerce process, the only thing left for you to do is create a theme or layout and style your app as you see fit.
 
