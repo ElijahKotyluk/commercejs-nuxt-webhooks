@@ -1,8 +1,8 @@
 # Webhooks with Commerce.js SDK and Nuxt.js
 
-This guide continues from (Creating a Checkout with Commerce.js SDK and Nuxt.js)[Creating a Checkout](https://github.com/ElijahKotyluk/nuxt-cjs-adding-products)
+This guide continues from (Creating a Checkout with Commerce.js SDK and Nuxt.js)[Creating a Checkout](https://github.com/ElijahKotyluk/commercejs-nuxt-checkout/blob/master/README.md)
 
-This guide illustrates how to create a webhook in the Chec dashboard and use it to send an Email to the customer also how to create a simple confirmation page.
+In this guide, I will illustrate how to create a webhook in the Chec dashboard and then use it to send an Email to the customer. I'll also be creating a simple order confirmation page.
 
 [Live Demo](https://cjs-nuxt-webhook.herokuapp.com/)
 
@@ -46,7 +46,7 @@ Basic knowldge of Express, Nuxt.js and JavaScript are required for this guide.
 
 ## Creating a SendGrid account
 
-An important part of this guide is setting up a [SendGrid](https://sendgrid.com) account and generating an API Key. So first thing's first, you should create an account(They do have a free option!). They will ask for some basic details to create your account, once completed you should find yourself welcomed by send grid. On the left side of the page is a menu, click on `settings` at the botttom and then locate the `API Keys`([Here](https://app.sendgrid.com/settings/api_keys) if you have an account already) option in the settings panel. You will then be taken to a fairly blank page that is titled, 'API Keys', you will want to click the `Create API Key` button on the right hand side. Once clicked, a dialog will pop up and allow you to name and set the terms for your API Key. I recommend just going with **Full Access**, as I have for this guide. 
+An important part of this guide is setting up a [SendGrid](https://sendgrid.com) account and generating an API Key. So first thing's first, you should create an account (they do have a free option!). SendGrid will ask for some basic details to create your account, once completed you should find yourself welcomed by SendGrid. On the left side of the page is a menu, click on `settings` at the botttom and then locate the `API Keys`([Here](https://app.sendgrid.com/settings/api_keys) if you have an account already) option in the settings panel. You will then be taken to a fairly blank page that is titled, 'API Keys', you will want to click the `Create API Key` button on the right hand side. Once clicked, a dialog will pop up and allow you to name and set the terms for your API Key. I recommend just going with **Full Access**, as I have for this guide. 
 
 ![Send Grid API Key](https://i.imgur.com/LRAAFPi.png)
 
@@ -356,7 +356,7 @@ Let's review what you have accomplished in this guide.
 
 As you can see, the Commerce.js SDK greatly simplifies the eCommerce process, the only thing left for you to do is create a theme or layout and style your app as you see fit.
 
-This guide continues from (Adding products to a cart with Nuxt.js and Commerce.js)[Adding Products To A Cart](https://github.com/ElijahKotyluk/nuxt-cjs-adding-products)
+This guide continues from Creating a checkout with Nuxt.js and Commerce.js [Creating a checkout](https://github.com/ElijahKotyluk/commercejs-nuxt-checkout/blob/master/README.md)
 
 ## Built With
 
