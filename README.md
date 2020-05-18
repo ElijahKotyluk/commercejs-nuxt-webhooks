@@ -4,7 +4,7 @@ This guide continues from (Creating a Checkout with Commerce.js SDK and Nuxt.js)
 
 This guide illustrates how to create a webhook in the Chec dashboard and use it to send an Email to the customer.
 
-[Live Demo](https://commercejs-sdk-nuxt-checkout.herokuapp.com/)
+[Live Demo](https://cjs-nuxt-webhook.herokuapp.com/)
 
 ***** *Note* *****
 
@@ -319,7 +319,7 @@ Let's review what you have accomplished in this guide.
 * Installed and used ngrok to test your webhook
 * 
 
-[Live Demo]()
+[Live Demo](https://cjs-nuxt-webhook.herokuapp.com/)
 
 ## Conclusion
 Nice work, you've successfully created a checkout page and captured an order.
