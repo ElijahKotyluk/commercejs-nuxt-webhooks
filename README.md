@@ -308,6 +308,19 @@ To test your webhook out, open up your browser and paste the copied link again i
 
 ![Email received](https://i.imgur.com/8YKv5yG.jpg)
 
+## Create a confirmation page
+For this last step you will be creating a confirmation page for your customer that will be routed to once they submit their order. To achieve this you will begin by creating a new directory within the [pages](https://nuxtjs.org/guide/views/#pages) directory, called `order`, and within `pages/order/` you will create a file called `_slug.vue`. The full path should be `pages/order/_slug.vue`. Inside the script portion of this single file component will be a single computed property, `checkout`, which will be mapped from your vuex store's state. This [capture checkout object](https://commercejs.com/docs/api/#capture-order) will provide you with the necessary data you would need to create a confirmation page for your customers.
+
+```js
+import { mapState } from 'vuex'
+
+export default {
+  computed: {
+   ...mapState(['checkout'])
+  }
+}
+```
+
 ### Conclusion
 
 Great job, you've successfully sent an email to your customer after they've submitted an order as well as a confirmation page for the customer.
