@@ -37,6 +37,13 @@ module.exports = {
     '@nuxtjs/eslint-module'
   ],
   /*
+  ** Nuxt server middleware
+  ** Docs: https://nuxtjs.org/api/configuration-servermiddleware/
+   */
+  serverMiddleware: [
+    { path: '/api/hook', handler: '~/api/hook.js' }
+  ],
+  /*
    ** Nuxt.js modules
    */
   modules: [
