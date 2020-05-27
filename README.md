@@ -65,28 +65,25 @@ After clicking the button, a menu containing a form will slide out from the righ
 
 ## Setting up the server
 
-Since you used the nuxt-cli to create this project, if you followed the same options as in the [first guide](https://github.com/ElijahKotyluk/commercejs-nuxt-demo) you will have had an express server already created with the project. Since you already have a base server created, the necessary dependencies will be installed. `body-parser` is a [middleware](https://www.npmjs.com/package/body-parser) that parses incoming requests before your handlers. `@sendgrid/mail` is the [SendGrid SDK](https://www.npmjs.com/package/@sendgrid/mail) used to send the emails. To install these dependencies, run either of the following in your terminal. *Be sure you are in the root of your project*
+Since you used the nuxt-cli to create this project, if you followed the and chose the same options as I did, in the [first guide](https://github.com/ElijahKotyluk/commercejs-nuxt-demo) you will have had an express server already created with the project. Since you already have a base server created, there is only one necessary dependency left to install. `@sendgrid/mail` is the [SendGrid SDK](https://www.npmjs.com/package/@sendgrid/mail) used to send the emails. To install this package, run either of the following in your terminal. *Be sure you are in the root of your project*
 
 ```ts
 // yarn
-yarn add body-parser @sendgrid/mail
+yarn add @sendgrid/mail
 
 //npm
-npm i body-parser @sendgrid/mail
+npm i @sendgrid/mail
 ```
 
-Once you have run one of the commands, go to the `server/index.js` file, create variables, and require the dependencies you have just installed. Be sure to have your server use the `bodyParser` middleware. The server file should look like this:
+ The server file will look like this:
 
 ```ts
 // server/index.js
 const express = require('express')
 const consola = require('consola')
-const bodyParser = require('body-parser')
-const sgMail = require('@sendgrid/mail')
 const { Nuxt, Builder } = require('nuxt')
 
 const app = express()
-app.use(bodyParser.json())
 
 // Import and Set Nuxt.js options
 const config = require('../nuxt.config.js')
@@ -118,55 +115,57 @@ async function start() {
 start()
 ```
 
-Next you'll want to edit the async start function that shipped with the server file, inside you'll use the `app.post()` [method](https://expressjs.com/en/api.html#app.post.method) to listen for an incoming request. Inside the post request create a `headers` object variable containg an `Accept` property with the following value: `*/*,`: Any mime type, `'Content-Type': 'application/json',`: Json is the expected format of the requested data, `'Access-Control-Allow-Origin': '*'`: Allow any origin to access the resource. You will then use the `res`(response) object and call `writeHead(200, headers)` with the headers variable you just created. Next you'll create a `credentials` variable which should have the value of your SendGrid API key. Since you stored it in the `.env` file earlier, you can just use `process.env.SENDGRID_API_KEY`. The last necessary variable is `msg`, this object will contain the necessary properties required to send an email through SendGrid; `to:`: Email recipient/customer, `from`: You, `subject`: Subject of the email. `text`: The message you'd like to send in the body of the email.
+Next you will create the server middleware used to send the email. First create an `api` directory in the root of your project, then add a file called `hook.js` inside. At the top of the file begin by importing client from the [@sendgrid/mail](https://github.com/sendgrid/sendgrid-nodejs/tree/master/packages/client) package installed previously. Then export a default function with the following parameters, `req`: request, `res`: response, and `next`. First will set the api key using a method on the imported client object. Then you will listen for a post request and push the streamed into an array, once the request has ended you will use JSON.parse to parse the array of data. From there you will be able to grab the customers email, first name, reference number, and also the merchant's email. The last necessary variable is `msg`, this object will contain the necessary properties required to send an email through SendGrid; `to:`: Email recipient/customer, `from`: You, `subject`: Subject of the email. `text`: The message you'd like to send in the body of the email. You then will then use the `send()` method on the client object and pass it the `msg` variable to send your customer an email when they place their order successfully.
 
 ```ts
-  // server/index.js
-  ...
-  // Build only in dev mode
-  if (config.dev) {
-    const builder = new Builder(nuxt)
-    await builder.build()
+// api/hook.js
+import client from '@sendgrid/mail';
+
+export default function(req, res, next) {
+  client.setApiKey(process.env.SENDGRID_API_KEY)
+
+  if (req.method === 'POST') {
+    const body = []
+    req.on('data', (chunk) => {
+      body.push(chunk)
+    })
+    req.on('end', () => {
+      const event = JSON.parse(body)
+
+      const msg = {
+        to: event.payload.customer.email,
+        from: event.payload.merchant.support_email,
+        subject: 'Thank you for your purchase!',
+        text: `Hi ${event.payload.customer.firstname},
+              thank you for your purchase. Here is your order reference: 
+              ${event.payload.customer_reference}`
+      }
+
+      client.send(msg)
+    })
   }
 
-  app.post('/', (req, res) => {
-    console.log('req: ', req.body) // Call your action on the request here
-    const headers = {
-      Accept: '*/*',
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*'
-    }
-    res.writeHead(200, headers)
+  res.statusCode = 200
+  res.end()
+}
+```
 
-    const credentials = "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"
-    sgMail.setApiKey(credentials)
+Update your nuxt.config.js file and register the server middleware you just created. To do this you will add the [serverMiddlerware](https://nuxtjs.org/api/configuration-servermiddleware/) property to your config file. The `serverMiddleware` property accepts a list of strings, objects, or functions as it's value. For this demo an object will be the item used, set `path`'s value to `/api/hook` and `handler`'s value to `~/api/hook.js`. The path is the route path and handler is the file path pointing to the file you just created.
 
-    const msg = {
-      to: req.body.payload.customer.email,
-      from: req.body.payload.merchant.support_email,
-      subject: 'Thank you for your purchase!',
-      text: `Hi ${req.body.payload.customer.firstname}, thank you for your purchase. Here is your order reference: ${req.body.payload.customer_reference}`
-    }
-
-    sgMail
-      .send(msg)
-        .then(
-          () => {},
-          (error) => {
-            console.error(error)
-
-            if (error.response) {
-              console.error(error.response.body)
-            }
-          }
-        )
-  })
-
-  // Give nuxt middleware to express
+```ts
+// nuxt.config.js
+  /*
+  ...
+  ** Nuxt server middleware
+  ** Docs: https://nuxtjs.org/api/configuration-servermiddleware/
+   */
+  serverMiddleware: [
+    { path: '/api/hook', handler: '~/api/hook.js' }
+  ],
   ...
 ```
 
-The request object, if successful, will contain a lot of data. The request object will have details about the webhook itself, the customer's cart, order reference, shipping information, merchant details, and anything else you could possibly need. A signature is also included, which you can use to validate the request came from Chec.io and not someone else.
+A successful request object will contain a lot of data, details about the webhook itself, the customer's cart, order reference, shipping information, merchant details, and anything else you could possibly need. A signature is also included, which you can use to validate the request came from Chec.io and not someone else.
 *This is the expected request body that will be logged when a successful request comes through from Chec.io:*
 
 ```ts
