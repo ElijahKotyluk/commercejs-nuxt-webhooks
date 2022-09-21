@@ -29,7 +29,7 @@
     "express": "^4.16.4",
     "nuxt": "^2.0.0",
     "twilio": "^3.43.0",
-    "vuetify": "^2.2.15"
+    "vuetify": "^2.6.10"
   },
   "devDependencies": {
     "@mdi/font": "4.9.95",
